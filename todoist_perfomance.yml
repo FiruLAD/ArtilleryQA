@@ -1,0 +1,46 @@
+config:
+  target: "https://api.todoist.com"
+  processor: "./randomData.js"
+  phases:
+    - duration: 5
+      arrivalRate: 5
+      name: "Phase 1"
+    - duration: 5
+      arrivalRate: 5
+      name: "Phase 2"
+  defaults:
+    headers:
+      Authorization: Bearer 86be3ae063153dacbc18c8b5c3d3bbf013481abf
+      Content-type: application/json
+scenarios:
+  - name: "FW Artillery"
+    flow:
+      - function: "RandomData"
+      #Get active tasks
+      - get:
+          url: "/rest/v1/tasks"
+      #Create a new task
+      - post:
+          url: "/rest/v1/tasks"
+          json:
+            content: "{{ contentTask }}"
+          capture:
+            json: "$.id"
+            as: "idTask"
+      #Get an active task
+      - get:
+          url: "/rest/v1/tasks/{{ idTask }}"
+      #Update a task
+      - post:
+          url: "/rest/v1/tasks/{{ idTask }}"
+          json:
+            content: "{{ updateMessage }}"
+      #Change a task status to 'complete'
+      - post:
+          url: "/rest/v1/tasks/{{ idTask }}/close"
+      #Reopen a task
+      - post:
+          url: "/rest/v1/tasks/{{ idTask }}/reopen"
+      #Delete a task
+      - delete:
+          url: "/rest/v1/tasks/{{ idTask }}"

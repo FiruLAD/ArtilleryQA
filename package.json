@@ -1,0 +1,15 @@
+{
+  "name": "fwartillery",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "artillery run --output results/report.json todoist_perfomance.yml && artillery report --output results/report.html results/report.json"
+  },
+  "author": "Ricardo Castanon",
+  "license": "ISC",
+  "devDependencies": {
+    "artillery": "^1.7.2",
+    "faker": "^5.5.3"
+  }
+}
